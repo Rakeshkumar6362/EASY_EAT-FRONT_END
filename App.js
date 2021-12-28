@@ -55,7 +55,7 @@ export default function App() {
   const [showLoader, setshowLoader] = useState(true);
   const Stack = createNativeStackNavigator();
 
-  
+  //sjhdgbjsd
 
   useEffect(() => {
     setTimeout(() => {
