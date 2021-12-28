@@ -43,9 +43,7 @@ const Starters = ({ setshowStarters = () => {}, navigation, route }) => {
     }
   }, [route.params?.title]);
   useEffect(async () => {
-
-  //  await axios.get(" https://9562-202-83-17-224.ngrok.io/EASY_EAT")
-  await axios.get("http://c3a4-202-83-17-224.ngrok.io/EASY_EAT")
+    await axios.get("https://eat-easy.herokuapp.com/EASY_EAT/get")
     .then(data=>{
       console.log("asgas",data);
       data && data.data.forEach(ele=>{

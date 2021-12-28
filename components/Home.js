@@ -61,7 +61,7 @@ const Home = ({ navigation }) => {
   }, []);
   const getMenu = async () => {
     // await axios.get("http://localhost:3000/EASY_EAT")
-   await axios.get("http://c3a4-202-83-17-224.ngrok.io/EASY_EAT")
+   await axios.get("https://eat-easy.herokuapp.com/EASY_EAT/get")
     .then((data) => {
       setRestaurant(data.data);
     });
