@@ -1,6 +1,6 @@
 // import {  } from 'expo-status-bar';
 import React, { useEffect, useState } from "react";
-import  axios  from "axios";
+import axios from "axios";
 import {
   SafeAreaView,
   StyleSheet,
@@ -15,12 +15,14 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import IceCream from "./components/IceCream";
+// import IceCream from "./components/IceCream";
 import MainCourse from "./components/MainCourse";
-import Smoothies from "./components/Smoothies";
 import Starters from "./components/Starters";
 import Home from "./components/Home";
 import Cart from "./components/Cart";
+import Login from "./components/Login";
+import OtpVerification from "./components/OtpVerification";
+import Register from "./components/Register";
 let ImagesData = [
   {
     id: 1,
@@ -62,69 +64,69 @@ export default function App() {
       setshowLoader(false);
     }, 7000);
   }, []);
-  const renderImages = ({ item }) => {
-    return (
-      <View
-        style={
-          {
-            // padding:2
-          }
-        }
-      >
-        <Pressable
-          onPress={() => {
-            if (item.id === 1) {
-              setshowStarters(true);
-            }
-            if (item.id === 2) {
-              setshowmaincourse(true);
-            }
-            if (item.id === 3) {
-              setshowsmoothies(true);
-            }
-            if (item.id === 4) {
-              setshowIcecream(true);
-            }
-          }}
-        >
-          <Image
-            resizeMode="cover"
-            style={{
-              height: 135,
-              width: 135,
-              borderRadius: 100,
-              // justifyContent:'center',
-              // alignItems:'center',
-              marginLeft: "auto",
-              marginTop: 10,
-            }}
-            source={{
-              uri: item.image,
-            }}
-          />
-        </Pressable>
-        <Text
-          style={{
-            textAlign: "right",
-            textTransform: "uppercase",
-            fontSize: 20,
-            color: "white",
-            padding: 2,
-            borderBottomWidth: 1,
-            borderBottomColor: "white",
-            marginTop: 1,
-            borderRadius: 20,
-          }}
-        >
-          {item.title}
-        </Text>
-      </View>
-    );
-  };
+  // const renderImages = ({ item }) => {
+  //   return (
+  //     <View
+  //       style={
+  //         {
+  //           // padding:2
+  //         }
+  //       }
+  //     >
+  //       <Pressable
+  //         onPress={() => {
+  //           if (item.id === 1) {
+  //             setshowStarters(true);
+  //           }
+  //           if (item.id === 2) {
+  //             setshowmaincourse(true);
+  //           }
+  //           if (item.id === 3) {
+  //             setshowsmoothies(true);
+  //           }
+  //           if (item.id === 4) {
+  //             setshowIcecream(true);
+  //           }
+  //         }}
+  //       >
+  //         <Image
+  //           resizeMode="cover"
+  //           style={{
+  //             height: 135,
+  //             width: 135,
+  //             borderRadius: 100,
+  //             // justifyContent:'center',
+  //             // alignItems:'center',
+  //             marginLeft: "auto",
+  //             marginTop: 10,
+  //           }}
+  //           source={{
+  //             uri: item.image,
+  //           }}
+  //         />
+  //       </Pressable>
+  //       <Text
+  //         style={{
+  //           textAlign: "right",
+  //           textTransform: "uppercase",
+  //           fontSize: 20,
+  //           color: "white",
+  //           padding: 2,
+  //           borderBottomWidth: 1,
+  //           borderBottomColor: "white",
+  //           marginTop: 1,
+  //           borderRadius: 20,
+  //         }}
+  //       >
+  //         {item.title}
+  //       </Text>
+  //     </View>
+  //   );
+  // };
   return (
     // <>
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="home">
+      <Stack.Navigator initialRouteName="login">
         <Stack.Screen
           name="home"
           component={Home}
@@ -132,7 +134,14 @@ export default function App() {
             headerShown: false,
           }}
         />
-        <Stack.Screen name="icecream" component={IceCream} />
+        <Stack.Screen
+          name="login"
+          component={Login}
+          options={{
+            headerShown: false,
+          }}
+        />
+        {/* <Stack.Screen name="icecream" component={IceCream} /> */}
         <Stack.Screen
           name="starters"
           component={Starters}
@@ -150,6 +159,20 @@ export default function App() {
         <Stack.Screen
           name="placeOrder"
           component={MainCourse}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="otpVerification"
+          component={OtpVerification}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="register"
+          component={Register}
           options={{
             headerShown: false,
           }}

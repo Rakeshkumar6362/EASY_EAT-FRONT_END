@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Icon } from "react-native-elements";
 import { Button, TextInput } from "react-native-paper";
+import axios from "axios";
 const Cart = ({ navigation, route }) => {
   const [cartItems, setCartItems] = useState([]);
   useEffect(() => {
@@ -18,6 +19,7 @@ const Cart = ({ navigation, route }) => {
       setCartItems(route.params?.cartItems);
     }
   }, [route.params.cartItems]);
+  console.log(route.params.userName);
   const renderCart = ({ item }) => {
     return (
       <View
@@ -91,62 +93,87 @@ const Cart = ({ navigation, route }) => {
     arr.forEach((ele) => {
       totalprice += ele.count * ele.price;
     });
-    let taxes = ((18*totalprice)/100).toFixed(2)
-    let grandTotal = (parseInt(totalprice) + parseFloat(taxes)).toFixed(2)
+    let taxes = ((18 * totalprice) / 100).toFixed(2);
+    let grandTotal = (parseInt(totalprice) + parseFloat(taxes)).toFixed(2);
     return (
-      <View style={{
-          paddingHorizontal:10,
-          paddingVertical:10,
-          backgroundColor:"white",
-          marginBottom:5
-      }}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginBottom:5
-          }}
-        >
-          <Text style={{
-              fontSize:15
-          }}>Item Total</Text>
-          <Text style={{
-              color:"gray"
-          }}>₹{totalprice}</Text>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginBottom:5
-
-          }}
-        >
-          <Text style={{
-              color:"gray"
-          }}>Taxes and Restaurant charges</Text>
-          <Text style={{
-              color:"gray"
-          }}>₹{taxes}</Text>
-        </View>
-        <View
+      <View
         style={{
+          paddingHorizontal: 10,
+          paddingVertical: 10,
+          backgroundColor: "white",
+          marginBottom: 5,
+        }}
+      >
+        <View
+          style={{
             flexDirection: "row",
             justifyContent: "space-between",
-            marginBottom:5,
-            marginTop:5
-          }} >
-          <Text  style={{
-              color:'black',
-              fontSize:16,
-              fontWeight:'bold',
-            }}>Grand Total</Text>
+            marginBottom: 5,
+          }}
+        >
           <Text
-           style={{
-             color:'black',
-             fontSize:16,
-            fontWeight:'bold'
-        }}>₹{grandTotal}</Text>
+            style={{
+              fontSize: 15,
+            }}
+          >
+            Item Total
+          </Text>
+          <Text
+            style={{
+              color: "gray",
+            }}
+          >
+            ₹{totalprice}
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 5,
+          }}
+        >
+          <Text
+            style={{
+              color: "gray",
+            }}
+          >
+            Taxes and Restaurant charges
+          </Text>
+          <Text
+            style={{
+              color: "gray",
+            }}
+          >
+            ₹{taxes}
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 5,
+            marginTop: 5,
+          }}
+        >
+          <Text
+            style={{
+              color: "black",
+              fontSize: 16,
+              fontWeight: "bold",
+            }}
+          >
+            Grand Total
+          </Text>
+          <Text
+            style={{
+              color: "black",
+              fontSize: 16,
+              fontWeight: "bold",
+            }}
+          >
+            ₹{grandTotal}
+          </Text>
         </View>
       </View>
     );
@@ -293,43 +320,77 @@ const Cart = ({ navigation, route }) => {
             </Text>
             <FlatList data={route.params.cartItems} renderItem={renderCart} />
           </View>
-          <View style={{
-              marginBottom:10
-          }}>{priceMenu()}</View>
-          <View style={{
-              backgroundColor:'white',
-              paddingHorizontal:10,
-              
-          }}>
-           <Text style={{
-               fontWeight:"bold",
-               fontSize:18,
-               paddingTop:20
-           }}>
-               Delivery Instructions
-           </Text>
-           <Text style={{
-               color:'gray',
-               paddingBottom:30,
-               paddingTop:10,
-               lineHeight:20
-           }}>
-               The Restaurant is using theor own delivery partner to deliver this order. You can call them to give any delivery instruction after placing order
-           </Text>
+          <View
+            style={{
+              marginBottom: 10,
+            }}
+          >
+            {priceMenu()}
+          </View>
+          <View
+            style={{
+              backgroundColor: "white",
+              paddingHorizontal: 10,
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                fontSize: 18,
+                paddingTop: 20,
+              }}
+            >
+              Delivery Instructions
+            </Text>
+            <Text
+              style={{
+                color: "gray",
+                paddingBottom: 30,
+                paddingTop: 10,
+                lineHeight: 20,
+              }}
+            >
+              The Restaurant is using theor own delivery partner to deliver this
+              order. You can call them to give any delivery instruction after
+              placing order
+            </Text>
           </View>
         </ScrollView>
         {/* <IconButton >asgsdfgh
 
         </IconButton> */}
-        <Button mode="contained" icon={'arrow-right'} theme={'dodgerblue'} dark={true} color="dodgerblue" contentStyle={{
-          flexDirection:'row-reverse',
-          justifyContent:'flex-start',
-          height:50
-        }}
-        onPress={()=>{
-          // navigation.goBack()
-          navigation.navigate('placeOrder')
-        }}
+        <Button
+          mode="contained"
+          icon={"arrow-right"}
+          theme={"dodgerblue"}
+          dark={true}
+          color="dodgerblue"
+          contentStyle={{
+            flexDirection: "row-reverse",
+            justifyContent: "flex-start",
+            height: 50,
+          }}
+          onPress={() => {
+            // navigation.goBack()
+            axios
+              .get(
+                `https://eat-easy.herokuapp.com/EASY_EAT/send/sms/user/${route.params.phoneNumber}`
+              )
+              .then((data) => {
+                console.log(data)
+                if (data) {
+                  axios
+                    .get(
+                      `https://eat-easy.herokuapp.com/EASY_EAT/send/sms/restaurant/${route.params.restaurantPhone}`
+                    )
+                    .then((data1) => {
+                      if (data1) {
+                        navigation.navigate("placeOrder");
+                      }
+                    });
+                }
+              });
+          }}
         >
           Place Order
         </Button>

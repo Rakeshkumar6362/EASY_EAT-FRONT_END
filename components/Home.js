@@ -17,8 +17,6 @@ import {
 } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-// let ImagesData = [
-//   {
 //     id: 1,
 //     image:
 //       "https://media.istockphoto.com/photos/brushetta-set-and-glass-of-red-wine-small-sandwiches-with-picture-id544722402?k=20&m=544722402&s=612x612&w=0&h=lOdSmDFPS3ypiTmUnEkvTqRFd8dde7QZ07dVNLdIlgk=",
@@ -47,7 +45,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 //     subTitle: "Fast Food, Pizza, Pasta",
 //   },
 // ];
-const Home = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
   const [showLoader, setShowLoader] = useState(true);
   const [restaurant, setRestaurant] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -61,18 +59,18 @@ const Home = ({ navigation }) => {
   }, []);
   const getMenu = async () => {
     // await axios.get("http://localhost:3000/EASY_EAT")
-   await axios.get("https://eat-easy.herokuapp.com/EASY_EAT/get")
-    .then((data) => {
-      setRestaurant(data.data);
-    });
+    await axios
+      .get("https://eat-easy.herokuapp.com/EASY_EAT/get")
+      .then((data) => {
+        setRestaurant(data.data);
+      });
   };
-
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     wait(1000).then(() => {
       setRefreshing(false);
       setSearchText("");
-      getMenu()
+      getMenu();
     });
   }, []);
 
@@ -86,8 +84,7 @@ const Home = ({ navigation }) => {
       setRestaurant([...arr1]);
     } else {
       // setRestaurant(ImagesData);
-      getMenu()
-
+      getMenu();
     }
   };
   useEffect(() => {
@@ -97,12 +94,10 @@ const Home = ({ navigation }) => {
         let name = item.title + item.subTitle;
         return name.toLowerCase().indexOf(searchText.toLowerCase()) > -1;
       });
-      console.log(arr1);
       setRestaurant([...arr1]);
     } else {
       // setRestaurant(ImagesDataget);
-      getMenu()
-
+      getMenu();
     }
   }, [searchText]);
   useEffect(() => {
@@ -114,18 +109,37 @@ const Home = ({ navigation }) => {
     return (
       <Pressable
         onPress={() => {
-          console.log(item, "iauu");
           if (item._id === 1) {
-            navigation.navigate("starters", { title: item.title });
+            navigation.navigate("starters", {
+              title: item.title,
+              restaurantPhone: item.phoneNumber,
+              phoneNumber: route.params.userData.phoneNumber,
+              userName: route.params.userData.userName,
+            });
           }
           if (item._id === 2) {
-            navigation.navigate("starters", { title: item.title });
+            navigation.navigate("starters", {
+              title: item.title,
+              restaurantPhone: item.phoneNumber,
+              phoneNumber: route.params.userData.phoneNumber,
+              userName: route.params.userData.userName,
+            });
           }
           if (item._id === 3) {
-            navigation.navigate("starters", { title: item.title });
+            navigation.navigate("starters", {
+              title: item.title,
+              restaurantPhone: item.phoneNumber,
+              userName: route.params.userData.userName,
+              phoneNumber: route.params.userData.phoneNumber,
+            });
           }
           if (item._id === 4) {
-            navigation.navigate("starters", { title: item.title });
+            navigation.navigate("starters", {
+              title: item.title,
+              restaurantPhone: item.phoneNumber,
+              userName: route.params.userData.userName,
+              phoneNumber: route.params.userData.phoneNumber,
+            });
           }
         }}
       >
@@ -213,6 +227,30 @@ const Home = ({ navigation }) => {
             <Text style={styles.heading}>WINE AND DINE</Text>
           </View> */}
       </SafeAreaView>
+      <View
+        style={{
+          marginTop: 5,
+          marginRight: 5,
+        }}
+      >
+        <Text
+          style={{
+            color: "white",
+            backgroundColor: "green",
+            // textAlign:'right',
+            marginLeft: "auto",
+            fontSize: 20,
+            borderRadius: 50,
+            width: 40,
+            textAlign: "center",
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            // padding:20
+          }}
+        >
+          {route.params.userData.userName.charAt(0)}
+        </Text>
+      </View>
 
       <TextInput
         value={searchText}

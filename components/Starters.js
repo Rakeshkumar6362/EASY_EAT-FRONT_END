@@ -22,7 +22,6 @@ import { Icon } from "react-native-elements";
 import { Switch } from "react-native-elements/dist/switch/switch";
 // import { Icon } from "react-native-vector-icons/icon";
 
-
 const Starters = ({ setshowStarters = () => {}, navigation, route }) => {
   const [isEnabled, setisEnabled] = useState(true);
   const [isNonEnabled, setIsNonEnabled] = useState(false);
@@ -34,8 +33,8 @@ const Starters = ({ setshowStarters = () => {}, navigation, route }) => {
   const [showAdd, setshowAdd] = useState(true);
   const [title, setTitle] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-  const [vegMenu ,setVegMenu] = useState([])
-  const [nonVegMenu ,setNonVegMenu] = useState([])
+  const [vegMenu, setVegMenu] = useState([]);
+  const [nonVegMenu, setNonVegMenu] = useState([]);
 
   useEffect(() => {
     if (route.params) {
@@ -43,17 +42,18 @@ const Starters = ({ setshowStarters = () => {}, navigation, route }) => {
     }
   }, [route.params?.title]);
   useEffect(async () => {
-    await axios.get("https://eat-easy.herokuapp.com/EASY_EAT/get")
-    .then(data=>{
-      console.log("asgas",data);
-      data && data.data.forEach(ele=>{
-        if(route.params.title===ele.title){
-          setVegMenu(ele.vegMenu)
-          setNonVegMenu(ele.nonVegMenu)
-        }
-      })
-    })
-  }, []);
+    await axios
+      .get("https://eat-easy.herokuapp.com/EASY_EAT/get")
+      .then((data) => {
+        data &&
+          data.data.forEach((ele) => {
+            if (route.params.title === ele.title) {
+              setVegMenu(ele.vegMenu);
+              setNonVegMenu(ele.nonVegMenu);
+            }
+          });
+      });
+  }, [refreshing]);
   useEffect(() => {
     if (isEnabled && !isNonEnabled) {
       setRenderMenuItems([...vegMenu]);
@@ -67,7 +67,7 @@ const Starters = ({ setshowStarters = () => {}, navigation, route }) => {
     if (!isNonEnabled && !isEnabled) {
       setRenderMenuItems([]);
     }
-  }, [isNonEnabled, isEnabled,vegMenu,nonVegMenu]);
+  }, [isNonEnabled, isEnabled, vegMenu, nonVegMenu]);
   const renderVeg = () => {
     setisEnabled(!isEnabled);
   };
@@ -143,6 +143,9 @@ const Starters = ({ setshowStarters = () => {}, navigation, route }) => {
               navigation.navigate("cart", {
                 title: route.params.title,
                 cartItems: temp,
+                restaurantPhone:route.params.restaurantPhone,
+                phoneNumber:route.params.phoneNumber,
+                userName:route.params.userName
               });
             }
             // setshowStarters(false)
@@ -389,10 +392,12 @@ const Starters = ({ setshowStarters = () => {}, navigation, route }) => {
     );
   };
   return (
-    <View style={{
-      backgroundColor:'white',
-      height:'100%'
-    }}>
+    <View
+      style={{
+        backgroundColor: "white",
+        height: "100%",
+      }}
+    >
       {showActivity ? (
         <ImageBackground
           resizeMode="contain"
@@ -411,7 +416,7 @@ const Starters = ({ setshowStarters = () => {}, navigation, route }) => {
               width: 30,
               paddingLeft: 7,
               alignItems: "flex-start",
-              backgroundColor:'#fffff',
+              backgroundColor: "#fffff",
               // marginLeft: "auto",
               paddingTop: 3,
               flexDirection: "row",
